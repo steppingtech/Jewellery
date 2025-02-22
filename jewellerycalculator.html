@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jewelry Price Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+     /* Premium Jewelry Website Look */
+body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(to bottom, #1a1a1a, #3d3d3d); /* Dark Luxury Background */
+    color: #fff;
+}
+
+/* Container */
+.container {
+    max-width: 500px;
+    width: 90%;
+    background: #222; /* Dark Theme */
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 20px rgba(255, 215, 0, 0.3); /* Gold Glow */
+    text-align: center;
+    border: 2px solid #d4af37; /* Gold Border */
+}
+
+/* Title */
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #f9d423; /* Gold Color */
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Input Fields */
+input, select {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #d4af37; /* Gold Border */
+    border-radius: 8px;
+    background: #333;
+    color: white;
+    text-align: center;
+}
+
+/* Input Placeholder Styling */
+input::placeholder {
+    color: #ccc;
+}
+
+/* Button */
+button {
+    padding: 12px;
+    font-size: 18px;
+    background: linear-gradient(to right, #d4af37, #f9d423); /* Gold Gradient */
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.3s ease-in-out;
+    font-weight: bold;
+}
+
+button:hover {
+    background: linear-gradient(to right, #f9d423, #d4af37); /* Reverse Gradient */
+    box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.6);
+}
+
+/* Total Price Display */
+#total-price {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 15px;
+    color: #f9d423; /* Gold Color */
+    text-shadow: 0px 0px 10px rgba(255, 215, 0, 0.6);
+}
+
+/* Responsive Design */
+@media screen and (min-width: 768px) {
+    .container {
+        max-width: 600px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Jewelry Price Calculator</h2>
+        <label>Gold Weight (g):</label>
+        <input type="number" id="goldWeight" placeholder="Enter gold weight">
+        
+        <label>Diamond Weight (ct):</label>
+        <input type="number" id="diamondWeight" placeholder="Enter diamond weight">
+        
+        <label>Gold Purity:</label>
+        <select id="goldPurity">
+            <option value="18">18K</option>
+            <option value="22">22K</option>
+            <option value="24">24K</option>
+        </select>
+        
+        <label>Gold Rate (per 10g):</label>
+        <input type="number" id="goldRate" placeholder="Enter today's gold rate per 10g">
+        
+        <label>Diamond Rate (per carat):</label>
+        <input type="number" id="diamondRate" placeholder="Enter today's diamond rate">
+        
+        <label>Stone Weight (g) (if any):</label>
+        <input type="number" id="stoneWeight" placeholder="Enter stone weight (if any)" value="0">
+        
+        <button onclick="calculatePrice()">Calculate Total Price</button>
+        
+        <p class="result" id="totalAmount">Total Price: ₹0</p>
+    </div>
+
+    <script>
+        function calculatePrice() {
+            let goldWeight = parseFloat(document.getElementById('goldWeight').value) || 0;
+            let diamondWeight = parseFloat(document.getElementById('diamondWeight').value) || 0;
+            let goldPurity = parseInt(document.getElementById('goldPurity').value);
+            let goldRatePer10g = parseFloat(document.getElementById('goldRate').value) || 0;
+            let diamondRate = parseFloat(document.getElementById('diamondRate').value) || 0;
+            let stoneWeight = parseFloat(document.getElementById('stoneWeight').value) || 0;
+            
+            // Corrected gold rate calculation based on purity
+            let goldRatePerGram = (goldRatePer10g / 10) * (goldPurity === 18 ? 0.76 : goldPurity === 22 ? 0.9167 : 1);
+            
+            // Gold price calculation
+            let goldPrice = goldWeight * goldRatePerGram;
+            
+            // Diamond price calculation
+            let diamondPrice = diamondWeight * diamondRate;
+            
+            // Making Charges: ₹1000 per gram of gold
+            let makingCharge = goldWeight * 1000;
+            
+            // Certification Charges: ₹1000 per carat of diamond
+            let certificationCharge = diamondWeight * 1000;
+            
+            // Stone Charges: ₹500 per gram of stone
+            let stoneCharge = stoneWeight * 500;
+            
+            // Subtotal before GST
+            let subtotal = goldPrice + diamondPrice + makingCharge + certificationCharge + stoneCharge;
+            
+            // GST Calculation (3%)
+            let gst = subtotal * 0.03;
+            
+            // Final total price
+            let totalPrice = subtotal + gst;
+            
+            document.getElementById('totalAmount').innerText = `Total Price: ₹${totalPrice.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
